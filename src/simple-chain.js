@@ -2,26 +2,31 @@ const CustomError = require("../extensions/custom-error");
 
 const chainMaker = {
   getLength() {
-    this.test.length;
+    this.cache.length;
     return this;
   },
   addLink(value) {
-		this.test.push('( ' + String(value) + ' )');
+		this.cache.push('( ' + String(value) + ' )');
     return this;
   },
   removeLink(position) {
-    this.test.splice(position - 1, 1);
+    if (this.cache[position - 1] === undefined) {
+      this.cache = [];
+      throw 'Error';
+  }
+    this.cache.splice(position - 1, 1);
     return this;
   },
   reverseChain() {
-    this.test = this.test.reverse();
+    this.cache = this.cache.reverse();
     return this;
   },
   finishChain() {
-    this.test = this.test.join('~~');
-    return this.test;
+    this.links = this.cache.join('~~');
+    this.cache = [];
+    return this.links;
   },
-  'test': [],
+  'cache': [],
 };
 
 module.exports = chainMaker;
